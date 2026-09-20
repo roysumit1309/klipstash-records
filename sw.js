@@ -9,7 +9,7 @@
 // strategy would be faster but would let an old app.js keep running
 // after a fix has shipped, and this is a page people open once a week.
 
-const CACHE = "records-shell-v2";
+const CACHE = "records-shell-v3";
 const SHELL = [
   "./",
   "./index.html",

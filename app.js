@@ -37,6 +37,7 @@ const ui = {
   list: el("list"),
   retry: el("retry"),
   changeClient: el("changeClient"),
+  activeClient: el("activeClient"),
 };
 
 let draining = false;
@@ -189,6 +190,7 @@ ui.saveClient.addEventListener("click", () => {
   }
   storeClientId(value);
   showCapture();
+  showActiveClient();
   say("Ready. Tap Sign in.");
 });
 
@@ -214,6 +216,16 @@ ui.signIn.addEventListener("click", async () => {
 // WRONG one - a client from another project, say - fails later at the
 // Drive call rather than at sign-in, and the page must still be
 // correctable then.
+/** The id currently in use, shown so it can be compared without guessing. */
+function showActiveClient() {
+  const id = storedClientId();
+  if (!ui.activeClient) return;
+  // Not a secret: a web client id is public by construction, and it is
+  // printed in full because the useful part is the segment after the
+  // project prefix, which every client in a project shares.
+  ui.activeClient.textContent = id ? `Using ${id}` : "";
+}
+
 ui.changeClient.addEventListener("click", () => {
   forgetClientId();
   showSetup();
@@ -241,6 +253,7 @@ window.addEventListener("online", () => void drain());
 function showCapture() {
   ui.setup.hidden = true;
   ui.capture.hidden = false;
+  showActiveClient();
 }
 
 function showSetup() {

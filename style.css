@@ -221,3 +221,15 @@ footer p {
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* The client id in use. Deliberately small, wrapping and selectable -
+   its whole job is being read back and compared, character by
+   character, against the one in the Cloud console. */
+.active-client {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
