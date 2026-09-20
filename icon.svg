@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Maskable, so everything meaningful stays inside the safe zone -
+       the middle 80%. Launchers crop the rest to whatever shape the
+       device prefers. -->
+  <rect width="192" height="192" fill="#0b0b0c"/>
+  <g fill="none" stroke="#ecedee" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- A receipt with a torn bottom edge: the one shape that reads as
+         "receipt" at 48px without any text. -->
+    <path d="M62 44h68v96l-11-8-11 8-12-8-11 8-12-8-11 8z"/>
+    <path d="M80 70h32M80 88h32M80 106h20"/>
+  </g>
+</svg>

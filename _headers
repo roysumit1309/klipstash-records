@@ -1,0 +1,24 @@
+# Security headers for the capture page. Cloudflare Pages and Netlify
+# both read this file; a plain static host ignores it harmlessly.
+
+/*
+  # The page is only ever opened directly. Nothing should be able to
+  # frame it and sit invisibly over the Google sign-in popup.
+  X-Frame-Options: DENY
+  # Referrers are never useful here and a URL can carry more than it
+  # looks like it does.
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  # Nothing here needs a camera *stream*, a microphone, or a location.
+  # The capture input hands off to the OS camera app and returns a
+  # file, which is not covered by the camera permission at all - so
+  # denying it costs nothing and shrinks what a compromised page could
+  # ask for.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Google Identity Services is loaded as a script and talks to Google
+  # to get a token; uploads go to googleapis.com. Nothing else is
+  # reachable, so an injected script has nowhere to send anything.
+  # 'unsafe-inline' covers the small style block on the privacy page
+  # only - there is no inline script anywhere, which is the half that
+  # matters.
+  Content-Security-Policy: default-src 'none'; script-src 'self' https://accounts.google.com https://apis.google.com; connect-src 'self' https://accounts.google.com https://oauth2.googleapis.com https://www.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-src https://accounts.google.com; manifest-src 'self'; base-uri 'none'; form-action 'none'

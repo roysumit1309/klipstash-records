@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- viewport-fit=cover plus the safe-area insets in the stylesheet
+         keep the shutter button clear of the iPhone home indicator. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0b0c" />
+    <title>Records</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Records</h1>
+      <p class="sub">Photograph a receipt. It appears on your desktop.</p>
+    </header>
+
+    <section id="setup">
+      <h2>One-time setup</h2>
+      <p class="hint">
+        Paste the <strong>Web</strong> OAuth client id from your Google Cloud project — the same
+        project the desktop app uses, or it will not see the same folder.
+      </p>
+      <input
+        id="clientId"
+        type="text"
+        inputmode="url"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="…apps.googleusercontent.com"
+      />
+      <button id="saveClient" class="primary">Save</button>
+    </section>
+
+    <section id="capture" hidden>
+      <button id="signIn" class="primary" hidden>Sign in to Google</button>
+
+      <!-- Two inputs, deliberately. Android 14+ Chrome drops the camera
+           option from a file input that sets `accept`, and "take one"
+           versus "send ones I already have" are different intentions
+           that should not share a button anyway. -->
+      <label class="shutter" for="shoot">
+        <span class="shutter-ring"></span>
+        <span>Take a photo</span>
+      </label>
+      <input id="shoot" type="file" accept="image/*" capture="environment" hidden />
+
+      <label class="secondary" for="pick">Choose from library</label>
+      <input id="pick" type="file" accept="image/*" multiple hidden />
+
+      <p id="status" class="status">Ready</p>
+      <button id="retry" hidden>Retry failed</button>
+      <ul id="list"></ul>
+    </section>
+
+    <footer>
+      <p>
+        Photos go to a <strong>Records</strong> folder in your own Google Drive. This page can only
+        see files it put there — never the rest of your Drive.
+      </p>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

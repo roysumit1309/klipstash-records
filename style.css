@@ -1,0 +1,209 @@
+/* Frosted Minimal, carried over from the desktop app: near-black,
+   monochrome, one accent only where a control has to be found by
+   thumb. Dark only - this is used in restaurants and car parks, and a
+   white screen at night is hostile. */
+
+:root {
+  --bg: #0b0b0c;
+  --surface: #151517;
+  --surface-2: #1c1c1f;
+  --border: #2a2a2e;
+  --text: #ecedee;
+  --text-dim: #8b8d91;
+  --ok: #7fb886;
+  --bad: #d98080;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Must out-rank the `display` rules below. The `hidden` attribute is
+   styled by the UA stylesheet, which loses to ANY author rule - so
+   `section { display: flex }` alone silently un-hides every hidden
+   section, and the setup and capture panels both render at once. */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sub,
+.hint {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+input[type="text"] {
+  width: 100%;
+  /* 16px exactly: anything smaller makes iOS Safari zoom the whole
+     page the moment the field is focused, and it never zooms back. */
+  font-size: 16px;
+  padding: 12px 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--text-dim);
+}
+
+button,
+label.secondary {
+  font: inherit;
+  font-size: 15px;
+  padding: 13px 18px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+  /* Removes the 300ms tap delay and the grey flash on iOS. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+  font-weight: 600;
+}
+
+button:active,
+label.secondary:active {
+  opacity: 0.7;
+}
+
+/* The one control that has to be findable without looking. Big, round,
+   centred, and at thumb height rather than at the top of the page. */
+.shutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 36px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shutter:active {
+  background: var(--surface-2);
+}
+
+.shutter-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--text);
+}
+
+.status {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-dim);
+  min-height: 21px;
+}
+
+.status.ok {
+  color: var(--ok);
+}
+
+.status.bad {
+  color: var(--bad);
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.shot-name {
+  flex: 1;
+  /* min-width:0 is what actually lets a flex child shrink; without it
+     a long filename pushes the status label off the row. */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+
+.shot-state {
+  flex: none;
+  color: var(--text-dim);
+}
+
+.shot.failed .shot-state {
+  color: var(--bad);
+}
+
+footer p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
