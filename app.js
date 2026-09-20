@@ -10,7 +10,14 @@
 // other way round. Backgrounding a browser tab kills in-flight
 // requests, and a receipt that only existed inside a fetch() is gone.
 
-import { accessToken, forgetToken, haveToken, storedClientId, storeClientId } from "./lib/auth.js";
+import {
+  accessToken,
+  forgetClientId,
+  forgetToken,
+  haveToken,
+  storedClientId,
+  storeClientId,
+} from "./lib/auth.js";
 import { ensureFolder, upload } from "./lib/drive.js";
 import { normalize, captureName } from "./lib/normalize.js";
 import * as queue from "./lib/queue.js";
@@ -29,6 +36,7 @@ const ui = {
   status: el("status"),
   list: el("list"),
   retry: el("retry"),
+  changeClient: el("changeClient"),
 };
 
 let draining = false;
@@ -193,8 +201,23 @@ ui.signIn.addEventListener("click", async () => {
     void drain();
   } catch (e) {
     notice = { message: e.message, kind: "bad" };
+    // A client id Google does not recognise can only be fixed by
+    // entering a different one, and the setup panel is hidden the
+    // moment any id is saved - so without this the page is stuck
+    // showing an error about a value there is no way to change.
+    if (/client id/i.test(e.message)) showSetup();
     await render();
   }
+});
+
+// Always available, not only after a failure: an id that is merely the
+// WRONG one - a client from another project, say - fails later at the
+// Drive call rather than at sign-in, and the page must still be
+// correctable then.
+ui.changeClient.addEventListener("click", () => {
+  forgetClientId();
+  showSetup();
+  say("Paste the Web client id for your Google Cloud project.");
 });
 
 ui.shoot.addEventListener("change", (e) => void accept(e.target.files).then(() => (e.target.value = "")));
@@ -218,6 +241,12 @@ window.addEventListener("online", () => void drain());
 function showCapture() {
   ui.setup.hidden = true;
   ui.capture.hidden = false;
+}
+
+function showSetup() {
+  ui.setup.hidden = false;
+  ui.capture.hidden = true;
+  ui.clientId.value = storedClientId();
 }
 
 async function start() {

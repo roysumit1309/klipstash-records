@@ -207,3 +207,17 @@ footer p {
   font-size: 12px;
   color: var(--text-dim);
 }
+
+/* A button that has to read as part of a sentence of links - it sits
+   between Privacy and Terms, and a bordered control there would look
+   like a mistake. */
+.linklike {
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
