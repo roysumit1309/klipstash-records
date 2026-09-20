@@ -12,7 +12,9 @@
 
 import {
   accessToken,
+  clientIdFromUrl,
   forgetClientId,
+  looksLikeClientId,
   forgetToken,
   haveToken,
   storedClientId,
@@ -184,8 +186,10 @@ async function drain() {
 
 ui.saveClient.addEventListener("click", () => {
   const value = ui.clientId.value.trim();
-  if (!value.endsWith(".apps.googleusercontent.com")) {
-    say("That does not look like a Google client id.", "bad");
+  if (!looksLikeClientId(value)) {
+    // Names the likely cause rather than only the symptom: on a phone
+    // this is nearly always a paste that lost its middle.
+    say("That does not look like a whole client id - it may have been cut short when pasted.", "bad");
     return;
   }
   storeClientId(value);
@@ -263,6 +267,16 @@ function showSetup() {
 }
 
 async function start() {
+  // A ?client_id= link wins over whatever is stored, so following the
+  // link again is always a way to put a broken setup right.
+  const fromUrl = clientIdFromUrl();
+  if (fromUrl && fromUrl !== storedClientId()) {
+    storeClientId(fromUrl);
+    // Removed from the address bar afterwards so a shared screenshot
+    // or a bookmark does not carry it around, and a reload does not
+    // keep re-applying it.
+    history.replaceState(null, "", location.pathname);
+  }
   if (storedClientId()) {
     showCapture();
     ui.clientId.value = storedClientId();
